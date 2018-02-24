@@ -28,7 +28,6 @@ func newEntry(path string) Entry {
     // jar包
 	if strings.HasSuffix(path, ".jar") || strings.HasSuffix(path, ".JAR") ||
 		strings.HasSuffix(path, ".zip") || strings.HasSuffix(path, ".ZIP") {
-
 		return newZipEntry(path)
 	}
 
