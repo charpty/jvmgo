@@ -31,9 +31,9 @@ type ClassFile struct {
 	thisClass    uint16
 	superClass   uint16
 	interfaces   []uint16
-	// fields       []*MemberInfo
-	// methods      []*MemberInfo
-	// attributes   []AttributeInfo
+	fields       []*MemberInfo
+	methods      []*MemberInfo
+	attributes   []AttributeInfo
 }
 
 func Parse(classData []byte) (cf *ClassFile, err error) {
@@ -56,16 +56,25 @@ func Parse(classData []byte) (cf *ClassFile, err error) {
 }
 
 func (self *ClassFile) read(reader *ClassReader) {
+	// 读取版本信息
 	self.readAndCheckMagic(reader)
 	self.readAndCheckVersion(reader)
+	// 读取常量池，动长
 	self.constantPool = readConstantPool(reader)
+	// 访问标志，是一个位图标记，记录了类的访问级别，类是否为final，是否是注解类型等等
 	self.accessFlags = reader.readUint16()
+	// 当前类名在常量池中的索引
 	self.thisClass = reader.readUint16()
+	// 当前类父类名在常量池中的索引
 	self.superClass = reader.readUint16()
+	// 读取该类实现的所有的接口
 	self.interfaces = reader.readUint16s()
-	// self.fields = readMembers(reader, self.constantPool)
-	// self.methods = readMembers(reader, self.constantPool)
-	// self.attributes = readAttributes(reader, self.constantPool)
+	// 读取当前类的属性，包括静态属性
+	self.fields = readMembers(reader, self.constantPool)
+	// 读取当前类的方法信息，包括静态方法
+	self.methods = readMembers(reader, self.constantPool)
+	// 读取剩余的不包含在方法或者字段里的其它属性表信息
+	self.attributes = readAttributes(reader, self.constantPool)
 }
 
 func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {

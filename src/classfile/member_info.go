@@ -19,9 +19,13 @@ method_info {
 
 type MemberInfo struct {
 	cp              ConstantPool
+	// 访问控制符，是否静态，是否公开等
 	accessFlags     uint16
+	// 方法名|字段名在常量池中索引
 	nameIndex       uint16
+	// 描述符字符串
 	descriptorIndex uint16
+	// 属性表，方法代码存在属性表中
 	attributes      []AttributeInfo
 }
 
