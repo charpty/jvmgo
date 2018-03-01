@@ -7,6 +7,32 @@ attribute_info {
     u1 info[attribute_length];
 }
 */
+
+// https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7
+// 一共23种属性表
+/*
+SourceFile
+InnerClasses
+EnclosingMethod
+SourceDebugExtension
+BootstrapMethods
+ConstantValue
+Code
+Exceptions
+RuntimeVisibleParameterAnnotations, RuntimeInvisibleParameterAnnotations
+AnnotationDefault
+MethodParameters
+Synthetic
+// Deprecated
+Signature
+RuntimeVisibleAnnotations, RuntimeInvisibleAnnotations
+LineNumberTable
+LocalVariableTable
+LocalVariableTypeTable
+StackMapTable
+RuntimeVisibleTypeAnnotations, RuntimeInvisibleTypeAnnotations
+ */
+
 type AttributeInfo interface {
 	readInfo(reader *ClassReader)
 }
@@ -47,6 +73,8 @@ func newAttributeInfo(attrName string, attrLen uint32, cp ConstantPool) Attribut
 		return &SourceFileAttribute{cp: cp}
 	case "Synthetic":
 		return &SyntheticAttribute{}
+	case "MethodParameters":
+		return &MethodParameters{cp: cp}
 	default:
 		return &UnparsedAttribute{attrName, attrLen, nil}
 	}
