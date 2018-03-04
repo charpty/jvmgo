@@ -1,4 +1,4 @@
-package runtime
+package runtimedata
 
 // 一个线程持有唯一的PC计数器和线程栈
 type Thread struct {
