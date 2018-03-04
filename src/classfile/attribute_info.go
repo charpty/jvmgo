@@ -20,6 +20,7 @@ ConstantValue
 Code
 Exceptions
 RuntimeVisibleParameterAnnotations, RuntimeInvisibleParameterAnnotations
+// 注解的默认值，关键值 default 后的值
 AnnotationDefault
 MethodParameters
 Synthetic
