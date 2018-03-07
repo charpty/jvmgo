@@ -2,6 +2,7 @@ package instruction
 
 import "runtimedata"
 
+// https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html
 type Instruction interface {
 	FetchOperands(reader *BytecodeReader)
 	Execute(frame runtimedata.Frame)
