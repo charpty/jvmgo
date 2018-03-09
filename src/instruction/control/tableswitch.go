@@ -13,7 +13,7 @@ type TABLE_SWITCH struct {
 	jumpOffsets   []int32
 }
 
-func (self *TABLE_SWITCH) FetchOprands(reader *instruction.BytecodeReader) {
+func (self *TABLE_SWITCH) FetchOperands(reader *instruction.BytecodeReader) {
 	reader.SkipPadding()
 	self.defaultOffset = reader.ReadInt32()
 	self.low = reader.ReadInt32()
@@ -22,7 +22,7 @@ func (self *TABLE_SWITCH) FetchOprands(reader *instruction.BytecodeReader) {
 	self.jumpOffsets = reader.ReadInt32s(jumpOffsetsCount)
 }
 
-func (self (TABLE_SWITCH)) Execute(frame *runtimedata.Frame) {
+func (self *TABLE_SWITCH) Execute(frame *runtimedata.Frame) {
 	val := frame.OperandStack().PopInt()
 	var offset int
 	if val >= self.low && val <= self.high {

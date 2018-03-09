@@ -38,6 +38,7 @@ func (self *Classpath) parseUserClasspath(cpOption string) {
 	if cpOption == "" {
 		cpOption = "."
 	}
+	util.Debug("user classpath is %s", cpOption)
 	self.userClasspath = newEntry(cpOption)
 }
 

@@ -22,16 +22,29 @@ func main() {
 
 func startJVM(cmd *Cmd) {
 	classData := readClassData(cmd)
-	parseClassData(classData)
+	classFile := parseClassData(classData)
+	// TODO
+	method := getMainMethod(classFile)
+	interpret(method)
 }
 
-func parseClassData(classData []byte) {
+func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range cf.Methods() {
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
+}
+
+func parseClassData(classData []byte) *classfile.ClassFile {
 	classFile, err := classfile.Parse(classData)
 	if err != nil {
 		fmt.Printf("Parse class error %s\n", err.Error())
 		panic("Parse class error")
 	}
 	fmt.Printf("class file: %+v", classFile)
+	return classFile
 }
 
 func readClassData(cmd *Cmd) (classData []byte) {

@@ -32,7 +32,7 @@ func (self *Frame) Thread() *Thread {
 	return self.thread
 }
 
-func (self *Frame) NextPc() int {
+func (self *Frame) NextPC() int {
 	return self.nextPC
 }
 

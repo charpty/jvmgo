@@ -24,16 +24,16 @@ type LCONST_0 struct{ instruction.NoOperandsInstruction }
 type LCONST_1 struct{ instruction.NoOperandsInstruction }
 
 // ref null
-func (self *ACONST_NULL) Exectue(frame *runtimedata.Frame) {
+func (self *ACONST_NULL) Execute(frame *runtimedata.Frame) {
 	frame.OperandStack().PushRef(nil)
 }
 
 // dobule 0
-func (self *DCONST_0) Exectue(frame *runtimedata.Frame) {
+func (self *DCONST_0) Execute(frame *runtimedata.Frame) {
 	frame.OperandStack().PushDouble(0.0)
 }
 
-func (self *DCONST_1) Exectue(frame *runtimedata.Frame) {
+func (self *DCONST_1) Execute(frame *runtimedata.Frame) {
 	frame.OperandStack().PushDouble(1.0)
 }
 

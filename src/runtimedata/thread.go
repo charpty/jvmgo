@@ -32,3 +32,11 @@ func (self *Thread) PopFrame() *Frame {
 func (self *Thread) CurrentFrame() *Frame {
 	return self.stack.Peek()
 }
+
+func (self *Thread) NewFrame(maxLocals uint, maxStack uint) *Frame {
+	return &Frame{
+		localVars:    newLocalVars(maxLocals),
+		operandStack: newOperandStack(maxStack),
+		thread:       self,
+	}
+}

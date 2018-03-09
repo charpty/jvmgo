@@ -1,5 +1,8 @@
 package util
 
-func Debug(message string)  {
-	println("[DEBUG] "+message)
+import "fmt"
+
+func Debug(format string, a ...interface{}) {
+	fmt.Printf("[DEBUG] "+format, a...)
+	fmt.Println()
 }
