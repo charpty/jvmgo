@@ -13,11 +13,11 @@ func NewThread() *Thread {
 	return thread
 }
 
-func (self *Thread) Pc() int {
+func (self *Thread) PC() int {
 	return self.pc
 }
 
-func (self *Thread) SetPc(pc int) {
+func (self *Thread) SetPC(pc int) {
 	self.pc = pc
 }
 
