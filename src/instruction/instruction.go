@@ -21,6 +21,7 @@ type BranchInstruction struct {
 // 抽象存储和加载类指令
 type Index8Instruction struct {
 	// 这些指令都需要存取局部变量表
+	// 之所以不是int8，是为了支持后续的扩展指令
 	Index uint
 }
 

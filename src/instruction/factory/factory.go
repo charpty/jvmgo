@@ -11,6 +11,7 @@ import . "instruction/loads"
 import . "instruction/math"
 import . "instruction/stack"
 import . "instruction/stores"
+import . "instruction/extended"
 
 // NoOperandsInstruction singletons
 var (
@@ -558,15 +559,14 @@ func NewInstruction(opcode byte) instruction.Instruction {
 		// 	return monitorenter
 		// case 0xc3:
 		// 	return monitorexit
-		// TODO 扩展指令还没写
-		//case 0xc4:
-		//	return &WIDE{}
-		//	// case 0xc5:
-		//	// 	return &MULTI_ANEW_ARRAY{}
-		//case 0xc6:
-		//	return &IFNULL{}
-		//case 0xc7:
-		//	return &IFNONNULL{}
+	case 0xc4:
+		return &WIDE{}
+		// case 0xc5:
+		// 	return &MULTI_ANEW_ARRAY{}
+	case 0xc6:
+		return &IFNULL{}
+	case 0xc7:
+		return &IFNONNULL{}
 		//case 0xc8:
 		//	return &GOTO_W{}
 		// case 0xc9:
