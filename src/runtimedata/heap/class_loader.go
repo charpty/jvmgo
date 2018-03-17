@@ -101,6 +101,7 @@ func prepare(class *Class) {
 	allocAndInitStaticVars(class)
 }
 
+
 func calcInstanceFieldSlotIds(class *Class) {
 	slotId := uint(0)
 	if class.superClass != nil {
