@@ -1,5 +1,7 @@
 package runtimedata
 
+import "runtimedata/heap"
+
 type Frame struct {
 	// 栈中桢通过链表形式连接
 	lower *Frame
@@ -9,15 +11,23 @@ type Frame struct {
 	operandStack *OperandStack
 	// 所属线程
 	thread *Thread
+	// 当前帧所在方法
+	method *heap.Method
 	// 下一个执行指令位置
 	nextPC int
 }
 
-func NewFrame(maxLocals, maxStack uint) *Frame {
+func NewFrame(thread *Thread, method *heap.Method) *Frame {
 	return &Frame{
-		localVars:    newLocalVars(maxLocals),
-		operandStack: newOperandStack(maxStack),
+		thread:       thread,
+		method:       method,
+		localVars:    newLocalVars(method.MaxLocals),
+		operandStack: newOperandStack(method.MaxStack),
 	}
+}
+
+func (self *Frame) Method() *heap.Method {
+	return self.method
 }
 
 // getters

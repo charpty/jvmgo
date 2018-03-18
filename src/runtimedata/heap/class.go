@@ -22,7 +22,15 @@ type Class struct {
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
-	return &Class{}
+	r := &Class{
+		accessFlags:    cf.AccessFlags(),
+		name:           cf.ClassName(),
+		superClassName: cf.SuperClassName(),
+	}
+	r.constantPool = newConstantPool(r, cf.ConstantPool())
+	r.fields = newFields(r, cf.Fields())
+	r.methods = newMethods(r, cf.Methods())
+	return r
 }
 
 func (self *Class) IsPublic() bool {
@@ -89,4 +97,45 @@ func (self *Class) getStaticMethod(name, descriptor string) *Method {
 
 func (self *Class) NewObject() *Object {
 	return newObject(self)
+}
+
+func (self *Class) isAssignableFrom(child *Class) bool {
+	p, c := self, child
+	if p == c {
+		return true
+	}
+	if p.IsInterface() {
+		return c.IsImplements(p)
+	} else {
+		return c.IsSubClassOf(p)
+	}
+}
+
+func (self *Class) IsSubClassOf(parent *Class) bool {
+	for c := self; c != nil; c = c.superClass {
+		if c == parent {
+			return true
+		}
+	}
+	return false
+}
+
+func (self *Class) IsImplements(parent *Class) bool {
+	for c := self; c != nil; c = c.superClass {
+		for _, intfc := range c.interfaces {
+			if intfc == parent || intfc.IsSubInterfaceOf(parent) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (self *Class) IsSubInterfaceOf(parent *Class) bool {
+	for _, c := range self.interfaces {
+		if c == parent || c.IsSubInterfaceOf(parent) {
+			return true;
+		}
+	}
+	return false
 }

@@ -1,43 +1,44 @@
 package runtimedata
 
 import "math"
+import "runtimedata/heap"
 
-type LocalVars []Slot
+type LocalVars []heap.Slot
 
 func newLocalVars(maxLocals uint) LocalVars {
 	if maxLocals > 0 {
-		return make([]Slot, maxLocals)
+		return make([]heap.Slot, maxLocals)
 	}
 	return nil
 }
 
 func (self LocalVars) SetInt(index uint, val int32) {
-	self[index].num = val
+	self[index].SetNum(val)
 }
 
 func (self LocalVars) GetInt(index uint) int32 {
-	return self[index].num
+	return self[index].Num()
 }
 
 func (self LocalVars) SetFloat(index uint, val float32) {
 	bits := math.Float32bits(val)
-	self[index].num = int32(bits)
+	self[index].SetNum(int32(bits))
 }
 
 func (self LocalVars) GetFloat(index uint) float32 {
-	bits := uint32(self[index].num)
+	bits := uint32(self[index].Num())
 	return math.Float32frombits(bits)
 }
 
 // long consumes two slots
 func (self LocalVars) SetLong(index uint, val int64) {
-	self[index].num = int32(val)
-	self[index+1].num = int32(val >> 32)
+	self[index].SetNum(int32(val))
+	self[index+1].SetNum(int32(val >> 32))
 }
 
 func (self LocalVars) GetLong(index uint) int64 {
-	low := uint32(self[index].num)
-	high := uint32(self[index+1].num)
+	low := uint32(self[index].Num())
+	high := uint32(self[index+1].Num())
 	return int64(high)<<32 | int64(low)
 }
 
@@ -52,10 +53,10 @@ func (self LocalVars) GetDouble(index uint) float64 {
 	return math.Float64frombits(bits)
 }
 
-func (self LocalVars) SetRef(index uint, ref *Object) {
-	self[index].ref = ref
+func (self LocalVars) SetRef(index uint, ref *heap.Object) {
+	self[index].SetRef(ref)
 }
 
-func (self LocalVars) GetRef(index uint) *Object {
-	return self[index].ref
+func (self LocalVars) GetRef(index uint) *heap.Object {
+	return self[index].Ref()
 }

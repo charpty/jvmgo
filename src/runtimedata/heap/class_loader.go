@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"classpath"
 	"classfile"
+	"strings"
+	"util"
 )
 
 /*
@@ -25,7 +27,8 @@ func NewClassLoader(cp *classpath.Classpath) *ClassLoader {
 	}
 }
 
-func (self *ClassLoader) LoadClass(name string) *Class {
+func (self *ClassLoader) LoadClass(className string) *Class {
+	name := strings.Replace(className, ".", "/", -1)
 	if class, ok := self.classMap[name]; ok {
 		// already loaded
 		return class
@@ -45,6 +48,7 @@ func (self *ClassLoader) loadNonArrayClass(name string) *Class {
 func (self *ClassLoader) readClass(name string) ([]byte, classpath.Entry) {
 	data, entry, err := self.cp.ReadClass(name)
 	if err != nil {
+		util.Error(err.Error())
 		panic("java.lang.ClassNotFoundException: " + name)
 	}
 	return data, entry
@@ -100,7 +104,6 @@ func prepare(class *Class) {
 	calcStaticFieldSlotIds(class)
 	allocAndInitStaticVars(class)
 }
-
 
 func calcInstanceFieldSlotIds(class *Class) {
 	slotId := uint(0)

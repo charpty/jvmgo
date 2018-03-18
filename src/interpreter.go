@@ -1,19 +1,18 @@
 package main
 
 import (
-	"classfile"
 	"runtimedata"
 	"fmt"
 	"instruction"
 	"instruction/factory"
 	"util"
+	"runtimedata/heap"
 )
 
-func interpret(methodInfo *classfile.MemberInfo) {
-	codeAttr := methodInfo.CodeAttribute()
-	maxLocals := codeAttr.MaxLocals()
-	maxStack := codeAttr.MaxStack()
-	code := codeAttr.Code()
+func interpret(method *heap.Method) {
+	maxLocals := method.MaxLocals
+	maxStack := method.MaxStack
+	code := method.Code
 	thread := runtimedata.NewThread()
 	frame := thread.NewFrame(maxLocals, maxStack)
 	thread.PushFrame(frame)

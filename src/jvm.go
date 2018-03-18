@@ -2,10 +2,10 @@ package main
 
 import "classpath"
 import "classfile"
+import "runtimedata/heap"
 
 import (
 	"fmt"
-	"strings"
 )
 
 func main() {
@@ -21,11 +21,14 @@ func main() {
 }
 
 func startJVM(cmd *Cmd) {
-	classData := readClassData(cmd)
-	classFile := parseClassData(classData)
-	// TODO
-	method := getMainMethod(classFile)
-	interpret(method)
+	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	fmt.Printf("classpath:%v class:%v args:%v\n",
+		cp, cmd.class, cmd.args)
+	classloader := heap.NewClassLoader(cp)
+	class := classloader.LoadClass(cmd.class)
+
+	mainMethod := class.GetMainMethod()
+	interpret(mainMethod)
 }
 
 func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
@@ -35,30 +38,4 @@ func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
 		}
 	}
 	return nil
-}
-
-func parseClassData(classData []byte) *classfile.ClassFile {
-	classFile, err := classfile.Parse(classData)
-	if err != nil {
-		fmt.Printf("Parse class error %s\n", err.Error())
-		panic("Parse class error")
-	}
-	fmt.Printf("class file: %+v", classFile)
-	return classFile
-}
-
-func readClassData(cmd *Cmd) (classData []byte) {
-	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-	fmt.Printf("classpath:%v class:%v args:%v\n",
-		cp, cmd.class, cmd.args)
-
-	className := strings.Replace(cmd.class, ".", "/", -1)
-	classData, _, err := cp.ReadClass(className)
-
-	if err != nil {
-		fmt.Printf("Could not find or load main class %s\n", cmd.class)
-		panic("Load class error, can not find the class file")
-	}
-	fmt.Printf("class data:%v\n", classData)
-	return classData
 }

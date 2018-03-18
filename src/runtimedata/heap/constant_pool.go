@@ -3,7 +3,6 @@ package heap
 import (
 	"classfile"
 	"fmt"
-	"util"
 )
 
 type Constant interface{}
@@ -21,9 +20,6 @@ func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 	for i := 0; i < cpCount; i++ {
 		ci := cfCp[i]
 		switch ci.(type) {
-		case classfile.ConstantIntegerInfo:
-			intInfo := ci.(*classfile.ConstantIntegerInfo)
-			consts[i] = intInfo.Value()
 		case *classfile.ConstantIntegerInfo:
 			intInfo := ci.(*classfile.ConstantIntegerInfo)
 			consts[i] = intInfo.Value()
@@ -54,10 +50,10 @@ func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 			methodrefInfo := ci.(*classfile.ConstantInterfaceMethodrefInfo)
 			consts[i] = newInterfaceMethodRef(rtCp, methodrefInfo)
 		default:
-			util.Debug("unknow type")
+			// util.Debug("unknow type")
 		}
 	}
-
+	return rtCp
 }
 
 func (self *ConstantPool) GetConstant(index uint) Constant {
