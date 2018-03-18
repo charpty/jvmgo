@@ -1,7 +1,5 @@
 package instruction
 
-import "fmt"
-
 type BytecodeReader struct {
 	code []byte
 	pc   int
@@ -14,14 +12,7 @@ func (self *BytecodeReader) ReadInt8() int8 {
 func (self *BytecodeReader) ReadUint8() uint8 {
 	r := self.code[self.pc]
 	self.pc++
-	defer tc()
 	return r
-}
-
-func tc() {
-	if recover() !=nil {
-		fmt.Print("1aa")
-	}
 }
 
 func (self *BytecodeReader) PC() int {
