@@ -10,18 +10,16 @@ import (
 )
 
 func interpret(method *heap.Method) {
-	maxLocals := method.MaxLocals
-	maxStack := method.MaxStack
 	code := method.Code
 	thread := runtimedata.NewThread()
-	frame := thread.NewFrame(maxLocals, maxStack)
+	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
 	defer catchErr(frame)
 	loop(thread, code)
 }
 
 func loop(thread *runtimedata.Thread, bytecode []byte) {
-	frame := thread.PopFrame()
+	frame := thread.CurrentFrame()
 	reader := &instruction.BytecodeReader{}
 	for {
 		pc := frame.NextPC()
@@ -35,6 +33,10 @@ func loop(thread *runtimedata.Thread, bytecode []byte) {
 		// execute
 		util.Debug("pc:%2d inst:%T %v\n", pc, inst, inst)
 		inst.Execute(frame)
+
+		if thread.IsStackEmpty() {
+			break
+		}
 	}
 }
 

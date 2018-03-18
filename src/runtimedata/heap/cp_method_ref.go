@@ -39,3 +39,11 @@ func (self *MethodRef) lookupMethod(cc *Class) *Method {
 	}
 	return nil
 }
+
+func (self *MethodRef) Name() string {
+	return self.name
+}
+
+func (self *MemberRef) Descriptor() string {
+	return self.descriptor
+}

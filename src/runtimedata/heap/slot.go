@@ -60,18 +60,18 @@ func (self Slots) GetRef(index uint) *Object {
 	return self[index].ref
 }
 
-func (self Slot) Num() int32 {
+func (self *Slot) Num() int32 {
 	return self.num
 }
 
-func (self Slot) Ref() *Object {
+func (self *Slot) Ref() *Object {
 	return self.ref
 }
 
-func (self Slot) SetNum(num int32) {
-	self.num = num
+func (self *Slot) SetNum(val int32) {
+	self.num = val
 }
 
-func (self Slot) SetRef(ref *Object) {
-	self.ref = ref
+func (self *Slot) SetRef(val *Object) {
+	self.ref = val
 }

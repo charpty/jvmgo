@@ -18,7 +18,8 @@ func newOperandStack(maxStack uint) *OperandStack {
 }
 
 func (self *OperandStack) PushInt(val int32) {
-	self.slots[self.size].SetNum(val)
+	slot := &self.slots[self.size]
+	slot.SetNum(val)
 	self.size++
 }
 
@@ -29,7 +30,7 @@ func (self *OperandStack) PopInt() int32 {
 
 func (self *OperandStack) PushFloat(val float32) {
 	bits := math.Float32bits(val)
-	self.slots[self.size].SetNum(int32(bits))
+	(&self.slots[self.size]).SetNum(int32(bits))
 	self.size++
 }
 func (self *OperandStack) PopFloat() float32 {
@@ -40,8 +41,8 @@ func (self *OperandStack) PopFloat() float32 {
 
 // long consumes two slots
 func (self *OperandStack) PushLong(val int64) {
-	self.slots[self.size].SetNum(int32(val))
-	self.slots[self.size+1].SetNum(int32(val >> 32))
+	(&self.slots[self.size]).SetNum(int32(val))
+	(&self.slots[self.size+1]).SetNum(int32(val >> 32))
 	self.size += 2
 }
 

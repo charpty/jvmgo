@@ -1,5 +1,7 @@
 package runtimedata
 
+import "runtimedata/heap"
+
 // 一个线程持有唯一的PC计数器和线程栈
 type Thread struct {
 	pc    int
@@ -33,10 +35,10 @@ func (self *Thread) CurrentFrame() *Frame {
 	return self.stack.Peek()
 }
 
-func (self *Thread) NewFrame(maxLocals uint, maxStack uint) *Frame {
-	return &Frame{
-		localVars:    newLocalVars(maxLocals),
-		operandStack: newOperandStack(maxStack),
-		thread:       self,
-	}
+func (self *Thread) NewFrame(method *heap.Method) *Frame {
+	return NewFrame(self, method)
+}
+
+func (self *Thread) IsStackEmpty() bool {
+	return self.stack.size == 0
 }
