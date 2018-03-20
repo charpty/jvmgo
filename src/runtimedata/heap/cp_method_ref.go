@@ -25,6 +25,9 @@ func (self *MethodRef) ResolvedMethod() *Method {
 func (self *MethodRef) resolvedMethodRef() {
 	self.ResolvedClass()
 	self.method = self.lookupMethod(self.class)
+	if self.method == nil {
+		self.method = self.lookupMethodInInterfaces(self.class.interfaces, )
+	}
 }
 
 func (self *MethodRef) lookupMethod(cc *Class) *Method {
@@ -33,10 +36,25 @@ func (self *MethodRef) lookupMethod(cc *Class) *Method {
 			return m
 		}
 	}
-
 	if sc := cc.superClass; sc != nil {
 		return self.lookupMethod(sc)
 	}
+	return nil
+}
+
+func (self *MethodRef) lookupMethodInInterfaces(intfs []*Class) *Method {
+	for _, i := range intfs {
+		for _, method := range i.methods {
+			if method.name == self.name && method.descriptor == self.descriptor {
+				return method
+			}
+		}
+		method := self.lookupMethodInInterfaces(i.interfaces)
+		if method != nil {
+			return method
+		}
+	}
+
 	return nil
 }
 

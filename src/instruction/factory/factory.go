@@ -204,12 +204,12 @@ func NewInstruction(opcode byte) instruction.Instruction {
 		return &BIPUSH{}
 	case 0x11:
 		return &SIPUSH{}
-		// case 0x12:
-		// 	return &LDC{}
-		// case 0x13:
-		// 	return &LDC_W{}
-		// case 0x14:
-		// 	return &LDC2_W{}
+	case 0x12:
+		return &LDC{}
+	case 0x13:
+		return &LDC_W{}
+	case 0x14:
+		return &LDC2_W{}
 	case 0x15:
 		return &ILOAD{}
 	case 0x16:
@@ -542,8 +542,8 @@ func NewInstruction(opcode byte) instruction.Instruction {
 		// 	return &INVOKE_INTERFACE{}
 		// case 0xba:
 		// 	return &INVOKE_DYNAMIC{}
-		// case 0xbb:
-		// 	return &NEW{}
+	case 0xbb:
+		return &NEW{}
 		// case 0xbc:
 		// 	return &NEW_ARRAY{}
 		// case 0xbd:

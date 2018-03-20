@@ -9,6 +9,7 @@ type Method struct {
 	MaxLocals uint
 	MaxStack  uint
 	Code      []byte
+	ArgCount  uint
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
@@ -17,13 +18,25 @@ func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
 		r[i] = &Method{}
 		r[i].class = class
 		r[i].copyMemberInfo(cfMethod)
+		r[i].calcArgCount(cfMethod)
 		attr := cfMethod.CodeAttribute()
-		if attr == nil {
-			continue
+		if attr != nil {
+			r[i].MaxLocals = attr.MaxLocals()
+			r[i].MaxStack = attr.MaxStack()
+			r[i].Code = attr.Code()
 		}
-		r[i].MaxLocals = attr.MaxLocals()
-		r[i].MaxStack = attr.MaxStack()
-		r[i].Code = attr.Code()
 	}
 	return r
+}
+func (self *Method) calcArgCount(cfMethod *classfile.MemberInfo) {
+	parsedDescriptor := parseMethodDescriptor(self.descriptor)
+	for _, paramType := range parsedDescriptor.parameterTypes {
+		self.ArgCount++
+		if paramType == "J" || paramType == "D" {
+			self.ArgCount++
+		}
+	}
+	if !self.IsStatic() {
+		self.ArgCount++ // `this` reference
+	}
 }
