@@ -153,11 +153,11 @@ var (
 	fcmpg   = &FCMPG{}
 	dcmpl   = &DCMPL{}
 	dcmpg   = &DCMPG{}
-	// ireturn = &IRETURN{}
-	// lreturn = &LRETURN{}
-	// freturn = &FRETURN{}
-	// dreturn = &DRETURN{}
-	// areturn = &ARETURN{}
+	ireturn = &IRETURN{}
+	lreturn = &LRETURN{}
+	freturn = &FRETURN{}
+	dreturn = &DRETURN{}
+	areturn = &ARETURN{}
 	_return = &RETURN{}
 	// arraylength   = &ARRAY_LENGTH{}
 	// athrow        = &ATHROW{}
@@ -512,16 +512,16 @@ func NewInstruction(opcode byte) instruction.Instruction {
 		return &TABLE_SWITCH{}
 	case 0xab:
 		return &LOOKUP_SWITCH{}
-		// case 0xac:
-		// 	return ireturn
-		// case 0xad:
-		// 	return lreturn
-		// case 0xae:
-		// 	return freturn
-		// case 0xaf:
-		// 	return dreturn
-		// case 0xb0:
-		// 	return areturn
+	case 0xac:
+		return ireturn
+	case 0xad:
+		return lreturn
+	case 0xae:
+		return freturn
+	case 0xaf:
+		return dreturn
+	case 0xb0:
+		return areturn
 	case 0xb1:
 		return _return
 	case 0xb2:

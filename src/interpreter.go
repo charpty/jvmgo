@@ -10,18 +10,18 @@ import (
 )
 
 func interpret(method *heap.Method) {
-	code := method.Code
 	thread := runtimedata.NewThread()
 	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
 	defer catchErr(frame)
-	loop(thread, code)
+	loop(thread)
 }
 
-func loop(thread *runtimedata.Thread, bytecode []byte) {
-	frame := thread.CurrentFrame()
+func loop(thread *runtimedata.Thread) {
 	reader := &instruction.BytecodeReader{}
 	for {
+		frame := thread.CurrentFrame()
+		bytecode := frame.Method().Code
 		pc := frame.NextPC()
 		thread.SetPC(pc)
 		// decode
