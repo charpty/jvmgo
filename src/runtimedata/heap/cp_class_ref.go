@@ -10,5 +10,8 @@ func newClassRef(rtCp *ConstantPool, classInfo *classfile.ConstantClassInfo) *Cl
 	ref := &ClassRef{}
 	ref.cp = rtCp
 	ref.className = classInfo.Name()
+	if ref.className == "" {
+		panic("ClassName can not be empty")
+	}
 	return ref
 }

@@ -33,8 +33,9 @@ func (self *ClassLoader) LoadClass(className string) *Class {
 		// already loaded
 		return class
 	}
-
-	return self.loadNonArrayClass(name)
+	result := self.loadNonArrayClass(name)
+	self.classMap[name] = result
+	return result
 }
 
 func (self *ClassLoader) loadNonArrayClass(name string) *Class {
@@ -79,6 +80,7 @@ func resolveSuperClass(class *Class) {
 		class.superClass = class.loader.LoadClass(class.superClassName)
 	}
 }
+
 func resolveInterfaces(class *Class) {
 	interfaceCount := len(class.interfaceNames)
 	if interfaceCount > 0 {

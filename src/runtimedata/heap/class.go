@@ -30,6 +30,7 @@ func newClass(cf *classfile.ClassFile) *Class {
 	r.constantPool = newConstantPool(r, cf.ConstantPool())
 	r.fields = newFields(r, cf.Fields())
 	r.methods = newMethods(r, cf.Methods())
+	r.interfaceNames = cf.InterfaceNames()
 	return r
 }
 

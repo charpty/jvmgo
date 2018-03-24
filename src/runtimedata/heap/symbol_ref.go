@@ -1,5 +1,7 @@
 package heap
 
+import "util"
+
 type SymbolRef struct {
 	cp        *ConstantPool
 	className string
@@ -15,6 +17,7 @@ func (self *SymbolRef) ResolvedClass() *Class {
 
 func (self *SymbolRef) resolveClassRef() {
 	cc := self.cp.class
+	util.Debug("Load class: " + self.className)
 	rc := cc.loader.LoadClass(self.className)
 	if !rc.isAccessibleTo(cc) {
 		panic("java.lang.IllegalAccessError: " + rc.name + " is not accessible to " + cc.name)

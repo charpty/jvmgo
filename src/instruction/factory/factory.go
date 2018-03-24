@@ -536,10 +536,10 @@ func NewInstruction(opcode byte) instruction.Instruction {
 		return &INVOKE_VIRTUAL{}
 	case 0xb7:
 		return &INVOKE_SPECIAL{}
-		// case 0xb8:
-		// 	return &INVOKE_STATIC{}
-		// case 0xb9:
-		// 	return &INVOKE_INTERFACE{}
+	case 0xb8:
+		return &INVOKE_STATIC{}
+	case 0xb9:
+		return &INVOKE_INTERFACE{}
 		// case 0xba:
 		// 	return &INVOKE_DYNAMIC{}
 	case 0xbb:

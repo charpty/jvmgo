@@ -85,3 +85,11 @@ func (self *OperandStack) PushSlot(slot heap.Slot) {
 	self.slots[self.size] = slot
 	self.size++
 }
+
+func (self *OperandStack) GetRefFromTop(n uint) *heap.Object {
+	u := self.size - 1 - n
+	if u >= self.size {
+		return nil
+	}
+	return self.slots[u].Ref()
+}

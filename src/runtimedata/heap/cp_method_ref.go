@@ -11,6 +11,9 @@ func newMethodRef(rtCp *ConstantPool, classInfo *classfile.ConstantMethodrefInfo
 	ref := &MethodRef{}
 	ref.cp = rtCp
 	ref.className = classInfo.ClassName()
+	if ref.className == "" {
+		panic("ClassName can not be empty")
+	}
 	ref.name, ref.descriptor = classInfo.NameAndDescriptor()
 	return ref
 }
@@ -24,20 +27,20 @@ func (self *MethodRef) ResolvedMethod() *Method {
 
 func (self *MethodRef) resolvedMethodRef() {
 	self.ResolvedClass()
-	self.method = self.lookupMethod(self.class)
+	self.method = self.LookupMethodInClass(self.class)
 	if self.method == nil {
 		self.method = self.lookupMethodInInterfaces(self.class.interfaces, )
 	}
 }
 
-func (self *MethodRef) lookupMethod(cc *Class) *Method {
+func (self *MethodRef) LookupMethodInClass(cc *Class) *Method {
 	for _, m := range cc.methods {
 		if m.name == self.name && m.descriptor == self.descriptor {
 			return m
 		}
 	}
 	if sc := cc.superClass; sc != nil {
-		return self.lookupMethod(sc)
+		return self.LookupMethodInClass(sc)
 	}
 	return nil
 }
@@ -60,8 +63,4 @@ func (self *MethodRef) lookupMethodInInterfaces(intfs []*Class) *Method {
 
 func (self *MethodRef) Name() string {
 	return self.name
-}
-
-func (self *MemberRef) Descriptor() string {
-	return self.descriptor
 }

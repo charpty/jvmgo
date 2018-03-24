@@ -2,7 +2,6 @@ package main
 
 import (
 	"runtimedata"
-	"fmt"
 	"instruction"
 	"instruction/factory"
 	"util"
@@ -21,6 +20,7 @@ func loop(thread *runtimedata.Thread) {
 	reader := &instruction.BytecodeReader{}
 	for {
 		frame := thread.CurrentFrame()
+		util.Debug("run current frame: " + frame.Method().Name())
 		bytecode := frame.Method().Code
 		pc := frame.NextPC()
 		thread.SetPC(pc)
@@ -31,7 +31,7 @@ func loop(thread *runtimedata.Thread) {
 		inst.FetchOperands(reader)
 		frame.SetNextPC(reader.PC())
 		// execute
-		util.Debug("pc:%2d inst:%T %v\n", pc, inst, inst)
+		util.Debug("pc:%2d inst:%T %v", pc, inst, inst)
 		inst.Execute(frame)
 
 		if thread.IsStackEmpty() {
@@ -42,8 +42,8 @@ func loop(thread *runtimedata.Thread) {
 
 func catchErr(frame *runtimedata.Frame) {
 	if r := recover(); r != nil {
-		fmt.Printf("LocalVars:%v\n", frame.LocalVars())
-		fmt.Printf("OperandStack:%v\n", frame.OperandStack())
+		util.Error("LocalVars:%v", frame.LocalVars())
+		util.Error("OperandStack:%v", frame.OperandStack())
 		panic(r)
 	}
 }

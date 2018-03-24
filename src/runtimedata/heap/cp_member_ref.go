@@ -6,5 +6,10 @@ type MemberRef struct {
 	descriptor string
 }
 
+func (self *MemberRef) Name() string {
+	return self.name
+}
 
-
+func (self *MemberRef) Descriptor() string {
+	return self.descriptor
+}

@@ -1,6 +1,9 @@
 package runtimedata
 
-import "runtimedata/heap"
+import (
+	"runtimedata/heap"
+	"util"
+)
 
 // 一个线程持有唯一的PC计数器和线程栈
 type Thread struct {
@@ -24,11 +27,14 @@ func (self *Thread) SetPC(pc int) {
 }
 
 func (self *Thread) PushFrame(frame *Frame) {
+	util.Debug("put frame: " + frame.method.Name())
 	self.stack.Push(frame)
 }
 
 func (self *Thread) PopFrame() *Frame {
-	return self.stack.Pop()
+	frame := self.stack.Pop()
+	util.Debug("pop frame: " + frame.method.Name())
+	return frame
 }
 
 func (self *Thread) CurrentFrame() *Frame {

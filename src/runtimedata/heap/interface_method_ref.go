@@ -1,6 +1,8 @@
 package heap
 
-import "classfile"
+import (
+	"classfile"
+)
 
 type InterfaceMethodRef struct {
 	MemberRef
@@ -11,6 +13,7 @@ func newInterfaceMethodRef(cp *ConstantPool,
 	refInfo *classfile.ConstantInterfaceMethodrefInfo) *InterfaceMethodRef {
 	ref := &InterfaceMethodRef{}
 	ref.cp = cp
+	ref.className = refInfo.ClassName()
 	ref.name, ref.descriptor = refInfo.NameAndDescriptor()
 	return ref
 }
@@ -24,8 +27,7 @@ func (self *InterfaceMethodRef) ResolvedInterfaceMethod() *Method {
 
 func (self *InterfaceMethodRef) resolvedInterfaceMethod() {
 	self.ResolvedClass()
-	self.method = self.lookupMethodInInterfaces(self.class.interfaces, )
-
+	self.method = self.lookupMethodInInterfaces([]*Class{self.class})
 }
 
 func (self *InterfaceMethodRef) lookupMethodInInterfaces(intfs []*Class) *Method {
@@ -41,5 +43,17 @@ func (self *InterfaceMethodRef) lookupMethodInInterfaces(intfs []*Class) *Method
 		}
 	}
 
+	return nil
+}
+
+func (self *InterfaceMethodRef) LookupMethodInClass(cc *Class) *Method {
+	for _, m := range cc.methods {
+		if m.name == self.name && m.descriptor == self.descriptor {
+			return m
+		}
+	}
+	if sc := cc.superClass; sc != nil {
+		return self.LookupMethodInClass(sc)
+	}
 	return nil
 }

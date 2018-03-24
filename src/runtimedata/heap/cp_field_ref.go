@@ -11,6 +11,9 @@ func newFieldRef(rtCp *ConstantPool, classInfo *classfile.ConstantFieldrefInfo) 
 	ref := &FieldRef{}
 	ref.cp = rtCp
 	ref.className = classInfo.ClassName()
+	if ref.className == "" {
+		panic("ClassName can not be empty")
+	}
 	ref.name, ref.descriptor = classInfo.NameAndDescriptor()
 	return ref
 }
