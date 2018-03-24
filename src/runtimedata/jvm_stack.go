@@ -31,8 +31,8 @@ func (self *Stack) Pop() *Frame {
 		panic("thread stack is empty")
 	}
 	r := self.top
-	r.lower = nil
 	self.top = r.lower
+	r.lower = nil
 	self.size--
 	return r
 }
