@@ -1,7 +1,6 @@
 package heap
 
 import (
-	"fmt"
 	"classpath"
 	"classfile"
 	"strings"
@@ -42,7 +41,7 @@ func (self *ClassLoader) loadNonArrayClass(name string) *Class {
 	data, entry := self.readClass(name)
 	class := self.defineClass(data)
 	link(class)
-	fmt.Printf("[Loaded %s from %s]\n", name, entry)
+	util.Debug("[Loaded %s from %s]", name, entry)
 	return class
 }
 

@@ -6,6 +6,7 @@ import "runtimedata/heap"
 
 import (
 	"fmt"
+	"util"
 )
 
 func main() {
@@ -22,7 +23,8 @@ func main() {
 
 func startJVM(cmd *Cmd) {
 	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-	fmt.Printf("classpath:%v class:%v args:%v\n",
+
+	util.Debug("classpath:%v class:%v args:%v\n",
 		cp, cmd.class, cmd.args)
 	classloader := heap.NewClassLoader(cp)
 	class := classloader.LoadClass(cmd.class)

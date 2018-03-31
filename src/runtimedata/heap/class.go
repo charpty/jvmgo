@@ -59,6 +59,10 @@ func (self *Class) IsEnum() bool {
 	return 0 != self.accessFlags&ACC_ENUM
 }
 
+func (self *Class) Name() string {
+	return self.name
+}
+
 // getters
 func (self *Class) ConstantPool() *ConstantPool {
 	return self.constantPool
