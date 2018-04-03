@@ -63,6 +63,10 @@ func (self *Class) Name() string {
 	return self.name
 }
 
+func (self *Class) Loader() *ClassLoader {
+	return self.loader
+}
+
 // getters
 func (self *Class) ConstantPool() *ConstantPool {
 	return self.constantPool
