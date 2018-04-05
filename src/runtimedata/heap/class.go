@@ -59,6 +59,16 @@ func (self *Class) IsEnum() bool {
 	return 0 != self.accessFlags&ACC_ENUM
 }
 
+func (self *Class) isJlObject() bool {
+	return self.name == "java/lang/Object"
+}
+func (self *Class) isJlCloneable() bool {
+	return self.name == "java/lang/Cloneable"
+}
+func (self *Class) isJioSerializable() bool {
+	return self.name == "java/io/Serializable"
+}
+
 func (self *Class) Name() string {
 	return self.name
 }
@@ -88,6 +98,17 @@ func (self *Class) getPackageName() string {
 	return ""
 }
 
+func (self *Class) GetField(name string, descriptor string) *Field {
+	for c := self; c != nil; c = c.superClass {
+		for _, f := range c.fields {
+			if f.name == name && f.descriptor == descriptor {
+				return f
+			}
+		}
+	}
+	return nil
+}
+
 func (self *Class) GetMainMethod() *Method {
 	return self.getStaticMethod("main", "([Ljava/lang/String;)V")
 }
@@ -113,14 +134,32 @@ func (self *Class) isAssignableFrom(child *Class) bool {
 	if p == c {
 		return true
 	}
-	if p.IsInterface() {
-		return c.IsImplements(p)
+	if c.IsArray() {
+		if p.IsArray() {
+			cc := c.ComponentClass()
+			pc := p.ComponentClass()
+			return cc == pc || pc.isAssignableFrom(cc)
+		} else {
+			// 如果父不是数组存在两种特殊情况，父是Object或者是cloneable接口或序列化接口
+			if p.IsInterface() {
+				return p.isJlCloneable() || p.isJioSerializable()
+			} else {
+				return p.isJlObject()
+			}
+		}
 	} else {
-		return c.IsSubClassOf(p)
+		if p.IsInterface() {
+			return c.IsImplements(p)
+		} else {
+			return c.IsSubClassOf(p)
+		}
 	}
 }
 
 func (self *Class) IsSubClassOf(parent *Class) bool {
+	if self.IsInterface() {
+		return parent.isJlObject()
+	}
 	for c := self; c != nil; c = c.superClass {
 		if c == parent {
 			return true
