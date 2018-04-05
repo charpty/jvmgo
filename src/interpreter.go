@@ -8,12 +8,24 @@ import (
 	"runtimedata/heap"
 )
 
-func interpret(method *heap.Method) {
+func interpret(method *heap.Method, args [] string) {
 	thread := runtimedata.NewThread()
 	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
+	// pushMainMethodLocalVars(frame, args)
 	defer catchErr(frame)
 	loop(thread)
+}
+
+func pushMainMethodLocalVars(mainFrame *runtimedata.Frame, args [] string) {
+	loader := mainFrame.Method().Class().Loader()
+	strClass := loader.LoadClass("java/lang/String")
+	arr := strClass.NewArray(uint(len(args)))
+	refs := arr.Refs()
+	for i := range args {
+		refs[i] = heap.JString(loader, args[i])
+	}
+	mainFrame.LocalVars().SetRef(0, arr);
 }
 
 func loop(thread *runtimedata.Thread) {

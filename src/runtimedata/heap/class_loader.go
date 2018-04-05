@@ -32,16 +32,38 @@ func (self *ClassLoader) LoadClass(className string) *Class {
 		// already loaded
 		return class
 	}
-	result := self.loadNonArrayClass(name)
+	var result *Class
+	if className[0] == '[' {
+		result = self.loadArrayClass(name)
+	} else {
+		result = self.loadNonArrayClass(name)
+	}
 	self.classMap[name] = result
 	return result
 }
 
 func (self *ClassLoader) loadNonArrayClass(name string) *Class {
+	util.Debug("[ Try read class %s ]", name)
 	data, entry := self.readClass(name)
 	class := self.defineClass(data)
-	link(class)
 	util.Debug("[Loaded %s from %s]", name, entry)
+	link(class)
+	return class
+}
+
+func (self *ClassLoader) loadArrayClass(name string) *Class {
+	class := &Class{
+		accessFlags: ACC_PUBLIC, // todo
+		name:        name,
+		loader:      self,
+		initStarted: true,
+		superClass:  self.LoadClass("java/lang/Object"),
+		interfaces: []*Class{
+			self.LoadClass("java/lang/Cloneable"),
+			self.LoadClass("java/io/Serializable"),
+		},
+	}
+	self.classMap[name] = class
 	return class
 }
 
@@ -167,7 +189,8 @@ func initStaticFinalVar(class *Class, field *Field) {
 			val := cp.GetConstant(cpIndex).(float64)
 			vars.SetDouble(slotId, val)
 		case "Ljava/lang/String;":
-			panic("todo")
+			val := JString(class.Loader(), cp.GetConstant(cpIndex).(string))
+			vars.SetRef(slotId, val)
 		}
 	}
 }

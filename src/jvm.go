@@ -1,7 +1,6 @@
 package main
 
 import "classpath"
-import "classfile"
 import "runtimedata/heap"
 
 import (
@@ -30,14 +29,5 @@ func startJVM(cmd *Cmd) {
 	class := classloader.LoadClass(cmd.class)
 
 	mainMethod := class.GetMainMethod()
-	interpret(mainMethod)
-}
-
-func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
-	for _, m := range cf.Methods() {
-		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
-			return m
-		}
-	}
-	return nil
+	interpret(mainMethod, cmd.args)
 }

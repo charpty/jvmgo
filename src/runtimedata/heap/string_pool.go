@@ -21,3 +21,8 @@ func JString(loader *ClassLoader, goStr string) *Object {
 	internedStrings[goStr] = javaStringObject
 	return javaStringObject
 }
+
+func GoString(javaStringObject *Object) string {
+	strValue := javaStringObject.GetRefValue("value", "[C")
+	return string(utf16.Decode(strValue.data.([]uint16)))
+}

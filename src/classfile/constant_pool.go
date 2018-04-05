@@ -12,14 +12,16 @@ func readConstantPool(reader *ClassReader) ConstantPool {
 	cp := make([]ConstantInfo, cpCount)
 
 	// The constant_pool table is indexed from 1 to constant_pool_count - 1.
-	for i := 1; i < cpCount; i++ {
+	for i := 1; i < cpCount-1; i++ {
+		fmt.Println(i)
+		fmt.Println(cpCount)
 		cp[i] = readConstantInfo(reader, cp)
 		// http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.5
 		// 这就是个数的特殊情况，读到long和double时，必须下一个元素是个空，以兼容老版本
 		// 这是由于一个byte占常量池2个位置
 		switch cp[i].(type) {
 		//case *ConstantLongInfo, *ConstantDoubleInfo:
-		//i++
+		//	i++
 		}
 	}
 

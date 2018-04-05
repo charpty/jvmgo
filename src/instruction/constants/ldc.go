@@ -4,6 +4,7 @@ import (
 	"instruction"
 	"runtimedata"
 )
+import "runtimedata/heap"
 
 // Push item from run-time constant pool
 type LDC struct{ instruction.Index8Instruction }
@@ -29,11 +30,12 @@ func _ldc(frame *runtimedata.Frame, index uint) {
 		stack.PushInt(c.(int32))
 	case float32:
 		stack.PushFloat(c.(float32))
-		// case string:
+	case string:
+		heap.JString(frame.Method().Class().Loader(), c.(string))
 		// case *heap.ClassRef:
 		// case MethodType, MethodHandle
 	default:
-		
+
 	}
 }
 

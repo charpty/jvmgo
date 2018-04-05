@@ -29,3 +29,8 @@ func (self *Object) SetRefValue(fieldName string, fieldDescriptor string, value 
 	field := self.class.GetField(fieldName, fieldDescriptor)
 	self.data.(Slots).SetRef(field.SlotId(), value)
 }
+
+func (self *Object) GetRefValue(fieldName string, fieldDescriptor string) *Object {
+	field := self.class.GetField(fieldName, fieldDescriptor)
+	return self.data.(Slots).GetRef(field.SlotId())
+}

@@ -1,5 +1,7 @@
 package classfile
 
+import "util"
+
 // https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4
 // 常量池元素第一个byte是标志位，不同的值代表不同的元素类型
 const (
@@ -62,6 +64,7 @@ func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 	case CONSTANT_InvokeDynamic:
 		return &ConstantInvokeDynamicInfo{}
 	default:
+		util.Error("unknow tag: %d", tag)
 		panic("java.lang.ClassFormatError: constant pool tag!")
 	}
 }
