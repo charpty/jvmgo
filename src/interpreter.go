@@ -13,7 +13,7 @@ func interpret(method *heap.Method, args [] string) {
 	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
 	// pushMainMethodLocalVars(frame, args)
-	defer catchErr(frame)
+	// defer catchErr(frame)
 	loop(thread)
 }
 

@@ -31,7 +31,8 @@ func _ldc(frame *runtimedata.Frame, index uint) {
 	case float32:
 		stack.PushFloat(c.(float32))
 	case string:
-		heap.JString(frame.Method().Class().Loader(), c.(string))
+		ref := heap.JString(frame.Method().Class().Loader(), c.(string))
+		stack.PushRef(ref)
 		// case *heap.ClassRef:
 		// case MethodType, MethodHandle
 	default:
