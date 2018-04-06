@@ -49,7 +49,21 @@ func (self *ARRAY_LENGTH) Execute(frame *runtimedata.Frame) {
 func getArrayClass(atype uint8, loader *heap.ClassLoader) *heap.Class {
 	switch atype {
 	case AT_BOOLEAN:
+		return loader.LoadClass("[Z")
+	case AT_BYTE:
 		return loader.LoadClass("[B")
+	case AT_CHAR:
+		return loader.LoadClass("[C")
+	case AT_SHORT:
+		return loader.LoadClass("[S")
+	case AT_INT:
+		return loader.LoadClass("[I")
+	case AT_LONG:
+		return loader.LoadClass("[J")
+	case AT_FLOAT:
+		return loader.LoadClass("[F")
+	case AT_DOUBLE:
+		return loader.LoadClass("[D")
 	default:
 		panic("unkonw array class type:" + string(atype))
 	}
