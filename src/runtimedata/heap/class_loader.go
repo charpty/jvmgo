@@ -87,11 +87,7 @@ func (self *ClassLoader) defineClass(data []byte) *Class {
 }
 
 func parseClass(data []byte) *Class {
-	cf, err := classfile.Parse(data)
-	if err != nil {
-		//panic("java.lang.ClassFormatError")
-		panic(err)
-	}
+	cf := classfile.Parse(data)
 	return newClass(cf)
 }
 

@@ -1,7 +1,5 @@
 package classfile
 
-import "fmt"
-
 /*
 ClassFile {
     u4             magic;
@@ -36,17 +34,17 @@ type ClassFile struct {
 	attributes   []AttributeInfo
 }
 
-func Parse(classData []byte) (cf *ClassFile, err error) {
-	defer func() {
-		// 函数返回前判断是否有异常发生
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				err = fmt.Errorf("%v", r)
-			}
-		}
-	}()
+func Parse(classData []byte) (cf *ClassFile) {
+	//defer func() {
+	//	// 函数返回前判断是否有异常发生
+	//	if r := recover(); r != nil {
+	//		var ok bool
+	//		err, ok = r.(error)
+	//		if !ok {
+	//			err = fmt.Errorf("%v", r)
+	//		}
+	//	}
+	//}()
 
 	// 构建一个classReader
 	cr := &ClassReader{classData}
