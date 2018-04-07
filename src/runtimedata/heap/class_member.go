@@ -27,6 +27,9 @@ func (self *ClassMember) IsProtected() bool {
 func (self *ClassMember) IsAbstract() bool {
 	return 0 != self.accessFlags&ACC_ABSTRACT
 }
+func (self *Method) IsNative() bool {
+	return 0 != self.accessFlags&ACC_NATIVE
+}
 func (self *ClassMember) IsStatic() bool {
 	return 0 != self.accessFlags&ACC_STATIC
 }
