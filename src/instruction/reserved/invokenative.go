@@ -6,6 +6,7 @@ import (
 	"runtimedata"
 )
 
+// https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.2
 type INVOKE_NATIVE struct{ instruction.NoOperandsInstruction }
 
 func (self *INVOKE_NATIVE) Execute(frame *runtimedata.Frame) {

@@ -1,6 +1,8 @@
 package native
 
-import "runtimedata"
+import (
+	"runtimedata"
+)
 
 type NativeMethod func(frame *runtimedata.Frame)
 
@@ -11,12 +13,12 @@ func emptyNativeMethod(frame *runtimedata.Frame) {
 }
 
 func Register(className, methodName, methodDescriptor string, method NativeMethod) {
-	key := className + "~" + methodName + "~" + methodDescriptor
+	key := getMethodSignature(className, methodName, methodDescriptor)
 	registry[key] = method
 }
 
 func FindNativeMethod(className, methodName, methodDescriptor string) NativeMethod {
-	key := className + "~" + methodName + "~" + methodDescriptor
+	key := getMethodSignature(className, methodName, methodDescriptor)
 	if method, ok := registry[key]; ok {
 		return method
 	}
@@ -24,4 +26,8 @@ func FindNativeMethod(className, methodName, methodDescriptor string) NativeMeth
 		return emptyNativeMethod
 	}
 	return nil
+}
+
+func getMethodSignature(className, methodName, methodDescriptor string) string {
+	return className + "~" + methodName + "~" + methodDescriptor
 }
