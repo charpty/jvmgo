@@ -93,3 +93,14 @@ func (self *OperandStack) GetRefFromTop(n uint) *heap.Object {
 	}
 	return self.slots[u].Ref()
 }
+
+func (self *OperandStack) PushBoolean(val bool) {
+	if val {
+		self.PushInt(1)
+	} else {
+		self.PushInt(0)
+	}
+}
+func (self *OperandStack) PopBoolean() bool {
+	return self.PopInt() == 1
+}

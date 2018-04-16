@@ -3,6 +3,7 @@ package heap
 type Object struct {
 	class *Class
 	data  interface{}
+	extra interface{}
 }
 
 func newObject(class *Class) *Object {
@@ -33,4 +34,11 @@ func (self *Object) SetRefValue(fieldName string, fieldDescriptor string, value 
 func (self *Object) GetRefValue(fieldName string, fieldDescriptor string) *Object {
 	field := self.class.GetField(fieldName, fieldDescriptor)
 	return self.data.(Slots).GetRef(field.SlotId())
+}
+
+func (self *Object) Extra() interface{} {
+	return self.extra
+}
+func (self *Object) SetExtra(extra interface{}) {
+	self.extra = extra
 }
