@@ -1,5 +1,7 @@
 package runtimedata
 
+import "fmt"
+
 type Stack struct {
 	maxSize uint
 	size    uint
@@ -16,7 +18,7 @@ func NewStack(maxSize uint) *Stack {
 
 func (self *Stack) Push(frame *Frame) {
 	if self.size >= self.maxSize {
-		panic("java.lang.StackOverflowError")
+		panic("java.lang.StackOverflowError, maxSize=" + fmt.Sprint(self.maxSize))
 	}
 
 	if self.top != nil {

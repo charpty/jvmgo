@@ -10,6 +10,7 @@ type INVOKE_SPECIAL struct{ instruction.Index16Instruction }
 
 // 调用私有方法和构造函数
 // TODO 深究调用过程？
+// TODO 子父类调用存在问题！例如StringBuilder的append方法！
 func (self *INVOKE_SPECIAL) Execute(frame *runtimedata.Frame) {
 	currentClass := frame.Method().Class()
 	cp := currentClass.ConstantPool()
