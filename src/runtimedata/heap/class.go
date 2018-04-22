@@ -75,6 +75,10 @@ func (self *Class) Name() string {
 	return self.name
 }
 
+func (self *Class) SuperClass() *Class {
+	return self.superClass
+}
+
 func (self *Class) Loader() *ClassLoader {
 	return self.loader
 }

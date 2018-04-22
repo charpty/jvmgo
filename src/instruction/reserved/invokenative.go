@@ -5,6 +5,8 @@ import (
 	"native"
 	"runtimedata"
 )
+import _ "native/java/lang"
+import _ "native/sun/misc"
 
 // https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.2
 type INVOKE_NATIVE struct{ instruction.NoOperandsInstruction }

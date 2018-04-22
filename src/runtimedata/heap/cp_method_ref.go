@@ -34,13 +34,12 @@ func (self *MethodRef) resolvedMethodRef() {
 }
 
 func (self *MethodRef) LookupMethodInClass(cc *Class) *Method {
-	for _, m := range cc.methods {
-		if m.name == self.name && m.descriptor == self.descriptor {
-			return m
+	for c := cc; c != nil; c = c.superClass {
+		for _, m := range cc.methods {
+			if m.name == self.name && m.descriptor == self.descriptor {
+				return m
+			}
 		}
-	}
-	if sc := cc.superClass; sc != nil {
-		return self.LookupMethodInClass(sc)
 	}
 	return nil
 }

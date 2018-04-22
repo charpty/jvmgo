@@ -79,3 +79,7 @@ func (self *Method) calcArgCount(cfMethod *classfile.MemberInfo) {
 		self.ArgCount++ // `this` reference
 	}
 }
+
+func (self *Method) Signature() string {
+	return self.class.name + "#" + self.name + self.descriptor
+}

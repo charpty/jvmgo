@@ -2,6 +2,7 @@ package native
 
 import (
 	"runtimedata"
+	"util"
 )
 
 type NativeMethod func(frame *runtimedata.Frame)
@@ -22,6 +23,9 @@ func FindNativeMethod(className, methodName, methodDescriptor string) NativeMeth
 	if method, ok := registry[key]; ok {
 		return method
 	}
+	util.Error("native method don't have: %s", key)
+	util.Debug("current native map: %v", registry)
+
 	if methodDescriptor == "()V" && methodName == "registerNatives" {
 		return emptyNativeMethod
 	}
