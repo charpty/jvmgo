@@ -88,6 +88,7 @@ func (self *ClassLoader) loadNonArrayClass(name string) *Class {
 }
 
 func (self *ClassLoader) loadArrayClass(name string) *Class {
+	util.Debug("[ Try load array %s ]", name)
 	class := &Class{
 		accessFlags: ACC_PUBLIC, // todo
 		name:        name,
